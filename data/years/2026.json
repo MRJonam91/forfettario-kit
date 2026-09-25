@@ -1,0 +1,40 @@
+{
+  "schema": "fk.t5.0b8d44",
+  "year": 2026,
+  "verified": false,
+  "sources": [
+    "https://www.tutelaprevidenziale.it/artigiani-e-commercianti-contributi-inps-2026-aliquote-minimali-scadenze-circolare-n-14-2026/",
+    "https://www.inps.it/it/it/inps-comunica/notizie/dettaglio-news-page.news.2026.02.gestioni-artigiani-e-commercianti-i-contributi-per-il-2026.html",
+    "https://calcolatoreforfettario.com/blog/aliquota-inps-gestione-separata-2026",
+    "https://pyva.it/blog/acconti-imposta-sostitutiva-forfettario",
+    "https://www.regime-forfettario.it/calendario-fiscale-2026-scadenze-forfettari/"
+  ],
+  "tax": { "standard": 0.15, "startup": 0.05 },
+  "thresholds": { "stay": 85000, "immediateExit": 100000 },
+  "coefficients": {
+    "professionisti": { "label": "Attività professionali, scientifiche, tecniche, sanitarie, di istruzione, servizi finanziari e assicurativi", "value": 0.78 },
+    "altre": { "label": "Altre attività economiche", "value": 0.67 },
+    "commercio": { "label": "Commercio all'ingrosso e al dettaglio", "value": 0.40 },
+    "alimentari": { "label": "Industrie alimentari e delle bevande", "value": 0.40 },
+    "ambulante-alimentari": { "label": "Commercio ambulante di prodotti alimentari e bevande", "value": 0.40 },
+    "ambulante-altro": { "label": "Commercio ambulante di altri prodotti", "value": 0.54 },
+    "costruzioni": { "label": "Costruzioni e attività immobiliari", "value": 0.86 },
+    "intermediari": { "label": "Intermediari del commercio", "value": 0.62 },
+    "alloggio-ristorazione": { "label": "Attività dei servizi di alloggio e di ristorazione", "value": 0.40 }
+  },
+  "gestioneSeparata": { "rate": 0.2607, "cap": 122295 },
+  "artigiani": { "minimale": 18808, "fixed": 4521.36, "rate": 0.24, "rateHigh": 0.25, "highFrom": 56224, "cap": 122295 },
+  "commercianti": { "minimale": 18808, "fixed": 4611.64, "rate": 0.2448, "rateHigh": 0.2548, "highFrom": 56224, "cap": 122295 },
+  "reductionForfettari": 0.35,
+  "advance": { "firstShare": 0.4, "noAdvanceBelow": 51.65, "singlePaymentBelow": 257.52 },
+  "deadlines": [
+    { "date": "2026-05-18", "what_it": "INPS artigiani/commercianti: 1ª rata contributi fissi", "what_en": "INPS craftsmen/traders: 1st fixed instalment", "for": ["artigiani", "commercianti"] },
+    { "date": "2026-06-30", "what_it": "F24: saldo 2025 + 1° acconto 2026 imposta sostitutiva (codici 1792, 1790) e contributi", "what_en": "F24: 2025 balance + 1st 2026 advance (codes 1792, 1790) and contributions", "for": ["all"] },
+    { "date": "2026-07-30", "what_it": "F24 differito con maggiorazione 0,40%", "what_en": "Deferred F24 with 0.40% surcharge", "for": ["all"] },
+    { "date": "2026-08-20", "what_it": "INPS artigiani/commercianti: 2ª rata contributi fissi", "what_en": "INPS craftsmen/traders: 2nd fixed instalment", "for": ["artigiani", "commercianti"] },
+    { "date": "2026-11-02", "what_it": "Dichiarazione dei redditi PF 2026 (anno 2025): invio telematico", "what_en": "Income tax return PF 2026 (year 2025): e-filing", "for": ["all"] },
+    { "date": "2026-11-17", "what_it": "INPS artigiani/commercianti: 3ª rata contributi fissi", "what_en": "INPS craftsmen/traders: 3rd fixed instalment", "for": ["artigiani", "commercianti"] },
+    { "date": "2026-11-30", "what_it": "F24: 2° acconto 2026 imposta sostitutiva (codice 1791) e contributi", "what_en": "F24: 2nd 2026 advance (code 1791) and contributions", "for": ["all"] },
+    { "date": "2027-02-16", "what_it": "INPS artigiani/commercianti: 4ª rata contributi fissi", "what_en": "INPS craftsmen/traders: 4th fixed instalment", "for": ["artigiani", "commercianti"] }
+  ]
+}

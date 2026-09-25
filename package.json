@@ -1,0 +1,78 @@
+{
+  "name": "forfettario-kit",
+  "version": "0.1.0",
+  "description": "Italian flat-tax (regime forfettario) toolkit for freelancers: tax, INPS contributions, net income, target revenue, 40/60 advances and an iCal of F24/INPS deadlines. Yearly params as data.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": "Manoj Rollo <fbxmano@gmail.com> (https://github.com/MRJonam91)",
+  "homepage": "https://github.com/MRJonam91/forfettario-kit#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MRJonam91/forfettario-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MRJonam91/forfettario-kit/issues"
+  },
+  "keywords": [
+    "forfettario",
+    "regime forfettario",
+    "partita iva",
+    "calcolo tasse",
+    "inps",
+    "gestione separata",
+    "freelance italy",
+    "f24"
+  ],
+  "engines": {
+    "node": ">=22.18"
+  },
+  "bin": {
+    "forfettario": "dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "data",
+    "README.md",
+    "README.it.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "scripts": {
+    "start": "node src/cli.ts",
+    "test": "node --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build",
+    "demo": "node src/cli.ts calcola --ricavi 40000 --attivita professionisti"
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/MRJonam91"
+    },
+    {
+      "type": "ko-fi",
+      "url": "https://ko-fi.com/mrjonam"
+    },
+    {
+      "type": "buymeacoffee",
+      "url": "https://buymeacoffee.com/mrjonam"
+    },
+    {
+      "type": "paypal",
+      "url": "https://paypal.me/manorollo"
+    }
+  ],
+  "devDependencies": {
+    "@types/node": "^22.18.0",
+    "typescript": "^5.9.0"
+  }
+}

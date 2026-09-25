@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - name: core size guard (< 1500 LOC)
+        run: |
+          LINES=$(find src/core -name '*.ts' -print0 | xargs -0 cat | grep -cv '^\s*$')
+          echo "core: $LINES non-empty lines"
+          [ "$LINES" -le 1500 ] || { echo "::error::core over 1500 lines ($LINES)"; exit 1; }
