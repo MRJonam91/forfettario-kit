@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         node: [22, 24]
@@ -44,7 +44,7 @@ jobs:
           [ -z "$MISSING" ] || { echo "::error::missing SPDX header: $MISSING"; exit 1; }
 
   e2e:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
