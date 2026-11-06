@@ -1,57 +1,17 @@
 {
   "name": "forfettario-kit",
-  "version": "0.1.0",
-  "description": "Italian flat-tax (regime forfettario) toolkit for freelancers: tax, INPS contributions, net income, target revenue, 40/60 advances and an iCal of F24/INPS deadlines. Yearly params as data.",
+  "version": "0.2.0-beta.1",
+  "description": "Calcolatore regime forfettario 2026 da terminale: tasse, contributi INPS, netto mensile e acconti in un comando. Italian flat-rate tax (regime forfettario) calculator CLI + library.",
   "type": "module",
-  "license": "Apache-2.0",
-  "author": "Manoj Rollo <fbxmano@gmail.com> (https://github.com/MRJonam91)",
-  "homepage": "https://github.com/MRJonam91/forfettario-kit#readme",
+  "license": "AGPL-3.0-only",
+  "author": "Manoj Rollo (MRJonam91) <fbxmano@gmail.com>",
+  "homepage": "https://mrjonam91.github.io/forfettario-kit/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MRJonam91/forfettario-kit.git"
   },
   "bugs": {
     "url": "https://github.com/MRJonam91/forfettario-kit/issues"
-  },
-  "keywords": [
-    "forfettario",
-    "regime forfettario",
-    "partita iva",
-    "calcolo tasse",
-    "inps",
-    "gestione separata",
-    "freelance italy",
-    "f24"
-  ],
-  "engines": {
-    "node": ">=22.18"
-  },
-  "bin": {
-    "forfettario": "dist/cli.js"
-  },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist",
-    "data",
-    "README.md",
-    "README.it.md",
-    "LICENSE",
-    "NOTICE"
-  ],
-  "scripts": {
-    "start": "node src/cli.ts",
-    "test": "node --test \"test/**/*.test.ts\"",
-    "typecheck": "tsc --noEmit",
-    "build": "tsc -p tsconfig.build.json",
-    "prepublishOnly": "npm run typecheck && npm test && npm run build",
-    "demo": "node src/cli.ts calcola --ricavi 40000 --attivita professionisti"
   },
   "funding": [
     {
@@ -71,8 +31,70 @@
       "url": "https://paypal.me/manorollo"
     }
   ],
+  "keywords": [
+    "forfettario",
+    "regime-forfettario",
+    "flat-tax",
+    "partita-iva",
+    "calcolatore-tasse",
+    "inps",
+    "gestione-separata",
+    "fisco",
+    "tasse",
+    "freelance",
+    "italy",
+    "italia",
+    "tax-calculator",
+    "cli",
+    "typescript",
+    "ateco",
+    "coefficiente-di-redditivita"
+  ],
+  "engines": {
+    "node": ">=22.18"
+  },
+  "bin": {
+    "forfettario-kit": "dist/adapters/bin.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "data",
+    "LICENSE",
+    "NOTICE",
+    "COMMERCIAL-LICENSE.md",
+    "README.md",
+    "README.it.md"
+  ],
+  "scripts": {
+    "start": "node src/adapters/bin.ts",
+    "test": "node --test \"test/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "core:loc": "node scripts/core-loc.mjs",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build",
+    "build:web": "node scripts/build-web.mjs",
+    "demo": "node scripts/demo-svg.mjs",
+    "test:e2e": "npm run build:web && playwright test",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=\"src/**\" \"test/*.test.ts\"",
+    "check": "npm run typecheck && npm test && npm run core:loc"
+  },
   "devDependencies": {
-    "@types/node": "^22.18.0",
-    "typescript": "^5.9.0"
+    "@axe-core/playwright": "^4.10.2",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
+    "@fontsource/ibm-plex-sans-condensed": "^5.3.0",
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^22.15.0",
+    "esbuild": "^0.25.10",
+    "typescript": "~5.9.3"
+  },
+  "overrides": {
+    "playwright-core": "1.56.1"
   }
 }

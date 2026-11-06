@@ -1,62 +1,44 @@
-# Lancio, SEO e promozione / Launch, SEO & promotion — forfettario-kit
+# Lancio / Launch
 
-## 1. Metadati repo / Repo metadata (impostati da `publish-private.ps1`)
+## Metadati / Metadata
 
-- **Description (≤ 350 char, keyword first):** Italian flat-tax (regime forfettario) toolkit for freelancers: tax, INPS contributions, net income, target revenue, 40/60 advances and an iCal of F24/INPS deadlines. Yearly params as data.
-- **Descrizione IT (per social/README):** Kit per partite IVA in regime forfettario: imposta sostitutiva, contributi INPS, netto, fatturato obiettivo, acconti 40/60 e calendario iCal delle scadenze F24/INPS. Parametri annuali come dati.
-- **Topics (15/20):** `forfettario regime-forfettario partita-iva freelance tasse inps gestione-separata f24 italy tax-calculator ical cli typescript nodejs fintech`
-- **Website:** GitHub Pages della demo / demo on GitHub Pages (`https://mrjonam91.github.io/forfettario-kit/`)
-- **Social preview (1280×640):** titolo + una riga del problema + screenshot della demo → *Settings → General → Social preview*.
-- **npm keywords:** già in `package.json`.
+- **Nome / Name**: `forfettario-kit`
+- **Description**: `Calcolatore regime forfettario 2026: tasse, contributi INPS, netto mensile e scadenze F24 con codici tributo. Web app + CLI, i dati restano nel browser. Italian flat-rate tax calculator.`
+- **Website**: https://mrjonam91.github.io/forfettario-kit/
+- **Topics (18)**: `forfettario` `regime-forfettario` `partita-iva` `flat-tax` `tasse` `calcolatore` `inps` `gestione-separata` `fisco-italiano` `freelance` `italy` `tax-calculator` `cli` `typescript` `nodejs` `ateco` `contributi-inps` `open-source`
+- **Social preview**: `docs/assets/social-preview.png` (1280×640) — Settings → General → Social preview.
+- **Parole chiave / Keywords IT**: calcolo tasse forfettario, quanto pago di tasse partita iva, calcolatore forfettario 2026, contributi inps forfettario, netto partita iva forfettaria, acconti forfettario.
+- **Keywords EN**: italian flat tax calculator, regime forfettario calculator, italy freelancer taxes, italian vat number tax, digital nomad italy tax.
 
-## 2. Parole chiave SEO / SEO keywords
+## Checklist pre-pubblicazione / Pre-publication checklist
 
-- IT: calcolo tasse forfettario, calcolatore regime forfettario 2026, quanto pago di tasse partita iva forfettaria, scadenze forfettario calendario, acconti forfettario 40 60
-- EN: italian flat tax calculator, forfettario calculator, italy freelancer tax
+- [ ] CI verde su `main` / CI green
+- [ ] Sponsorship attiva: Settings → General → Features → Sponsorships (+ GitHub Sponsors abilitato su MRJonam91)
+- [ ] Social preview caricata / uploaded
+- [ ] Release `v0.2.0-beta.1` (pre-release) creata dal workflow `release.yml` con la web app offline allegata / Release created by the release workflow
+- [ ] (facoltativo) secret `NPM_TOKEN` nel repo per pubblicare su npm con tag `next` / optional npm publish
+- [ ] GitHub Pages: Settings → Pages → Source = **GitHub Actions** (funziona con repo pubblica o piano Pro), poi verifica https://mrjonam91.github.io/forfettario-kit/
+- [ ] Inviare il link della web app a 3–5 partite IVA e 1 commercialista per un giro di prova (alfa)
+- [ ] App CLA (workflow `cla.yml`) testata con una PR di prova / tested with a dummy PR
+- [ ] `npm publish` (nome `forfettario-kit` libero su npm) → `npx forfettario-kit` funziona
+- [ ] 3 issue `good first issue` aperte: anno 2025, Inarcassa, tabella ATECO 2025
+- [ ] Repo resa pubblica: `gh repo edit MRJonam91/forfettario-kit --visibility public --accept-visibility-change-consequences`
 
-Regole: la parola chiave principale va nel nome repo, nella description, nel primo H1/H2 del README e nell'`alt` della demo.
-GitHub indicizza README, description e topics; Google indicizza soprattutto README e GitHub Pages.
+## Canali e tempi / Channels and timing
 
-## 3. Checklist prima di rendere pubblica / Before going public
+- **Momento migliore**: inizio giugno (saldo e primo acconto al 30/06) o metà novembre (secondo acconto al 30/11); in alternativa gennaio (nuove aliquote INPS). Martedì–giovedì, 9–11 per il pubblico italiano.
+- r/ItaliaPersonalFinance, r/ItalyInformatica, r/italy (flair Economia), r/commercialisti, gruppi Facebook/Telegram "Partita IVA forfettaria", LinkedIn con la GIF/SVG.
+- EN: r/digitalnomad e r/ItalyExpat (nomadi digitali con partita IVA italiana), Show HN, liste `awesome-italy` / `awesome-cli-apps`.
+- Articolo dev.to/Medium: "Ho trasformato il regime forfettario in una funzione pura da 300 righe".
+- Rispondere a tutti i commenti nelle prime 3 ore. / Reply to every comment in the first 3 hours.
 
-- [ ] `npm test` verde, CI verde / tests and CI green
-- [ ] Demo GIF/SVG aggiornata (`vhs docs/demo.tape`) / demo refreshed
-- [ ] Social preview caricata / social preview uploaded
-- [ ] Sponsorship attiva (Settings → Features → Sponsorships) / Sponsorships enabled
-- [ ] Release `v0.1.0` con note IT/EN / release with IT/EN notes
-- [ ] Marker anti-plagio registrati in `_provenance/` (privato) / markers registered privately
-- [ ] GitHub Pages attivo per la demo web (se presente) / Pages enabled for the web demo
+## Bozze / Drafts
 
-## 4. Dove condividere / Where to share
+**LinkedIn / Reddit (IT)**
+> Ogni giugno la stessa domanda: "quanto devo mettere da parte?". Ho scritto forfettario-kit, un calcolatore open source per il regime forfettario 2026: un comando e vedi contributi INPS, imposta, netto mensile e acconti. Zero dipendenze, dati con le fonti (circolari INPS 2026), funziona anche come libreria. `npx forfettario-kit 40000 --ateco 62.01` — feedback benvenuti, soprattutto da commercialisti.
 
-🇮🇹
-- r/ItaliaPersonalFinance, r/italyfinance, r/ItalyInformatica (tanti dev freelance)
-- Gruppi Facebook/Telegram 'Partita IVA forfettaria', community freelance (Freelancecamp, Slow Working, Developers Italia)
-- LinkedIn: post a giugno e novembre (scadenze) con il calendario iCal gratuito
-- Newsletter per freelance e podcast di fisco per partite IVA
+**Show HN (EN)**
+> Show HN: forfettario-kit – Italy's flat-rate freelancer tax in one command
 
-🌍
-- r/digitalnomad, r/expats, r/italy (foreign freelancers moving to Italy)
-- Show HN (tax-rules-as-data angle)
-
-Tempistica consigliata: martedì–giovedì, 9:00–11:00 CET per l'Italia; 15:00–17:00 CET per HN/Reddit (mattina USA).
-Rispondi a tutti i commenti nelle prime 3 ore: è ciò che spinge il post in alto.
-
-## 5. Bozze post / Draft posts
-
-**Hacker News (Show HN):**
-> Show HN: Italian flat-tax calculator with yearly rules as reviewable JSON
-
-**Post IT (LinkedIn / Telegram / Facebook):**
-> Partita IVA forfettaria? forfettario-kit ti dice in 2 secondi tasse, INPS, netto, quanto fatturare per il netto che vuoi e ti dà il calendario delle scadenze da importare nel telefono. Gratis, open source, parametri annuali verificabili da tutti.
-
-**Post EN (Reddit / X / Mastodon / Bluesky):**
-> Moving to Italy as a freelancer? The 'regime forfettario' is great but confusing. forfettario-kit computes tax, social security, net income and exports every deadline to your calendar. Apache-2.0.
-
-## 6. Crescita continua / Ongoing growth
-
-- Una issue `good first issue` sempre aperta per ogni fonte dati o città/Paese mancante.
-- Release frequenti e piccole (ogni release = nuova notifica ai watcher).
-- Aggiungi il progetto alle liste *awesome-* pertinenti: awesome-italy, awesome-freelance, awesome-fintech.
-- Scrivi un post tecnico (dev.to / Medium / blog personale) su "come l'ho costruito", con link alla repo.
-- Badge "Sponsor" e link donazioni in README, `--help` e footer CLI (già presenti).
+**Telegram / X (IT)**
+> 💶 Forfettario 2026: quanto ti resta davvero? `npx forfettario-kit 40000 --ateco 62.01` → tasse, INPS, netto mensile e acconti. Open source.

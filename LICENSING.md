@@ -1,21 +1,17 @@
-# Licensing — forfettario-kit
+# Licensing / Licenze
 
 | Parte / Part | Licenza / License | File |
 |---|---|---|
-| Codice sorgente / Source code | Apache-2.0 | [LICENSE](LICENSE), [NOTICE](NOTICE) |
-| Documentazione / Documentation | CC BY-SA 4.0 | — |
-| Dati di terzi / Third-party data | Licenza della fonte / Source license | [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) |
+| Codice sorgente / Source code (`src/`, `test/`, `examples/`, `scripts/`) | AGPL-3.0-only **oppure / or** licenza commerciale | [LICENSE](LICENSE), [COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md) |
+| Documentazione / Documentation (`README*.md`, `docs/*.md`) | CC BY-SA 4.0 | https://creativecommons.org/licenses/by-sa/4.0/ |
+| Demo e immagini / Demo and images (`docs/assets/`) | CC BY-NC-SA 4.0 | https://creativecommons.org/licenses/by-nc-sa/4.0/ |
+| Font IBM Plex inclusi nella web app / bundled in the web app | SIL Open Font License 1.1 | https://github.com/IBM/plex |
+| Parametri fiscali / Fiscal parameters (`data/years/`) | AGPL-3.0-only (la raccolta; i valori sono dati pubblici di legge) / (the compilation; values are public law) | [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) |
 
-## 🇮🇹 Perché questa scelta
-Utility semplice e replicabile in altre città/contesti: Apache-2.0 massimizza l'adozione,
-ma obbliga a mantenere copyright, NOTICE e attribuzione e include una concessione esplicita
-sui brevetti. I contributi usano il **DCO** (`git commit -s`).
-Servizi a valore aggiunto (hosting, white-label, personalizzazioni, supporto) restano vendibili dall'autore.
+**IT** — Puoi usare, studiare, modificare e ridistribuire il codice alle condizioni dell'AGPL-3.0: se lo offri come servizio in rete (SaaS, gestionale online, app) devi rendere disponibile il sorgente completo delle tue modifiche. Se questo non è compatibile con il tuo prodotto, puoi acquistare una [licenza commerciale](COMMERCIAL-LICENSE.md).
 
-## 🇬🇧 Why
-Simple utility meant to be replicated in other cities/contexts: Apache-2.0 maximises adoption
-while requiring copyright, NOTICE and attribution to be preserved, plus an explicit patent grant.
-Contributions use the **DCO** (`git commit -s`). Value-added services (hosting, white-label,
-customisation, support) remain sellable by the author.
+**EN** — You may use, study, modify and redistribute the code under the AGPL-3.0: if you offer it as a network service (SaaS, online accounting tool, app) you must publish the complete source of your changes. If that does not fit your product, a [commercial license](COMMERCIAL-LICENSE.md) is available.
 
-> Linee guida pratiche, non consulenza legale. / Practical guidelines, not legal advice.
+Contributi esterni solo con firma del [CLA](CLA.md). / External contributions require signing the [CLA](CLA.md).
+
+Copyright (c) 2026 Manoj Rollo (MRJonam91)

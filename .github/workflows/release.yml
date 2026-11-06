@@ -1,0 +1,45 @@
+name: release
+
+# Su ogni tag v*: test, build, release GitHub con la web app offline allegata
+# e (se il secret NPM_TOKEN esiste) pubblicazione su npm con provenance.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      - run: npm run build:web
+      - name: web app offline
+        run: cp site/index.html "forfettario-kit-${GITHUB_REF_NAME}.html"
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PRE=""
+          case "$GITHUB_REF_NAME" in *-*) PRE="--prerelease";; esac
+          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 \
+            && gh release upload "$GITHUB_REF_NAME" "forfettario-kit-${GITHUB_REF_NAME}.html" --clobber \
+            || gh release create "$GITHUB_REF_NAME" "forfettario-kit-${GITHUB_REF_NAME}.html" $PRE --title "forfettario-kit ${GITHUB_REF_NAME}" --notes-file docs/RELEASE_NOTES.md
+      - name: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        if: env.NODE_AUTH_TOKEN != ''
+        run: |
+          TAG=latest
+          case "$GITHUB_REF_NAME" in *-*) TAG=next;; esac
+          npm publish --provenance --access public --tag "$TAG"

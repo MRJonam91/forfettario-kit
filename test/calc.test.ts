@@ -1,67 +1,102 @@
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: AGPL-3.0-only
 // SPDX-FileCopyrightText: 2026 Manoj Rollo (MRJonam91)
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { loadYear } from "../src/adapters/years.ts";
-import { advanceFor, calculate, contributions, revenueForNet } from "../src/core/calc.ts";
-import { deadlinesFor, toIcs } from "../src/core/ics.ts";
+import { calcola, calcolaAcconti } from "../src/core/calc.ts";
+import { calcolaContributi } from "../src/core/inps.ts";
+import { caricaAnno } from "../src/adapters/rules.ts";
 
-const p = loadYear(2026);
+const rules = caricaAnno(2026);
 
-test("professional in gestione separata, 40k revenue, standard rate", () => {
-  const r = calculate({ revenue: 40_000, activity: "professionisti", fund: "gestioneSeparata" }, p);
-  assert.equal(r.grossIncome, 31_200);
-  assert.equal(r.contributions, 8133.84); // 31,200 × 26.07%
-  assert.equal(r.taxableIncome, 23_066.16);
-  assert.equal(r.tax, 3459.92);
-  assert.equal(r.net, 28_406.24);
+test("professionista in Gestione separata, 40.000 euro, ATECO 62.01", () => {
+  const r = calcola(rules, { attivita: [{ ateco: "62.01", ricavi: 40000 }], gestione: "separata" });
+  assert.equal(r.redditoLordo, 26800);
+  assert.equal(r.contributi.totale, 6986.76);
+  assert.equal(r.imponibile, 19813.24);
+  assert.equal(r.imposta, 2971.99);
+  assert.deepEqual(r.acconti, { dovuti: true, prima: 1188.8, seconda: 1783.19 });
+  assert.equal(r.netto, 30041.25);
+  assert.ok(r.avvisi.some((a) => a.codice === "contributi-a-regime"));
 });
 
-test("startup rate 5%", () => {
-  const r = calculate({ revenue: 40_000, activity: "professionisti", fund: "gestioneSeparata", startup: true }, p);
-  assert.equal(r.tax, 1153.31);
+test("commerciante sotto il minimale, riduzione 35% e startup 5%", () => {
+  const r = calcola(rules, {
+    attivita: [{ ateco: "47.91", ricavi: 30000 }],
+    gestione: "commercianti",
+    riduzione: "forfettari",
+    startup: true,
+  });
+  assert.equal(r.redditoLordo, 12000);
+  assert.equal(r.contributi.totale, 3000.17);
+  assert.equal(r.imposta, 449.99);
+  assert.deepEqual(r.acconti, { dovuti: true, prima: 180, seconda: 269.99 });
+  assert.ok(r.avvisi.some((a) => a.codice === "minimale-ivs"));
 });
 
-test("craftsman: fixed minimum below the minimale, bracket above it, 35% reduction", () => {
-  assert.equal(contributions(10_000, "artigiani", p), 4521.36);
-  assert.equal(contributions(28_808, "artigiani", p), 4521.36 + 2400);
-  assert.equal(contributions(10_000, "artigiani", p, true), 2938.88);
+test("artigiano oltre il primo scaglione: fissi + due fasce di eccedenza", () => {
+  const c = calcolaContributi(rules, 67000, "artigiani");
+  assert.equal(c.fissi, 4521.36);
+  assert.equal(c.eccedenza, 11673.84);
+  assert.equal(c.totale, 16195.2);
 });
 
-test("upper bracket and cap", () => {
-  const atHigh = contributions(56_224, "commercianti", p);
-  assert.equal(contributions(66_224, "commercianti", p), Math.round((atHigh + 10_000 * 0.2548) * 100) / 100);
-  assert.equal(contributions(500_000, "gestioneSeparata", p), contributions(122_295, "gestioneSeparata", p));
+test("contributi fissi 2026 coerenti con la circolare INPS 14/2026", () => {
+  assert.equal(calcolaContributi(rules, 0, "artigiani").totale, 4521.36);
+  assert.equal(calcolaContributi(rules, 0, "commercianti").totale, 4611.64);
 });
 
-test("advance rules: none, single payment, 40/60", () => {
-  assert.deepEqual(advanceFor(40, p), { total: 0, june: 0, november: 0 });
-  assert.deepEqual(advanceFor(200, p), { total: 200, june: 0, november: 200 });
-  assert.deepEqual(advanceFor(1000, p), { total: 1000, june: 400, november: 600 });
+test("Gestione separata: massimale", () => {
+  assert.equal(calcolaContributi(rules, 500000, "separata").totale, 31882.31);
 });
 
-test("thresholds produce warnings, unverified params always warn", () => {
-  const r = calculate({ revenue: 90_000, activity: "altre", fund: "gestioneSeparata" }, p);
-  assert.ok(r.warnings.some((w) => w.includes("dall'anno successivo")));
-  assert.ok(r.warnings.some((w) => w.includes("da verificare")));
+test("cassa professionale con minimo", () => {
+  assert.equal(calcolaContributi(rules, 10000, "cassa", "nessuna", { aliquota: 0.14, minimo: 2000 }).totale, 2000);
+  assert.equal(calcolaContributi(rules, 30000, "cassa", "nessuna", { aliquota: 0.14, minimo: 2000 }).totale, 4200);
+  assert.throws(() => calcolaContributi(rules, 1, "cassa"), /aliquota/);
 });
 
-test("35% reduction is refused for gestione separata", () => {
-  assert.throws(() => calculate({ revenue: 1, activity: "altre", fund: "gestioneSeparata", reduction: true }, p), /artigiani e commercianti/);
+test("contributi dedotti espliciti e spese reali", () => {
+  const r = calcola(rules, {
+    attivita: [{ ateco: "62.01", ricavi: 40000 }],
+    gestione: "separata",
+    contributiDedotti: 5000,
+    spese: 1000,
+  });
+  assert.equal(r.imponibile, 21800);
+  assert.equal(r.imposta, 3270);
+  assert.equal(r.netto, 28743.24);
+  assert.ok(!r.avvisi.some((a) => a.codice === "contributi-a-regime"));
 });
 
-test("target net → revenue round-trips", () => {
-  const base = { activity: "professionisti", fund: "gestioneSeparata" as const };
-  const rev = revenueForNet(30_000, base, p);
-  const net = calculate({ ...base, revenue: rev }, p).net;
-  assert.ok(net >= 30_000 && net < 30_002, String(net));
+test("più attività con coefficienti diversi", () => {
+  const r = calcola(rules, {
+    attivita: [
+      { ateco: "62.01", ricavi: 30000 },
+      { ateco: "47.91", ricavi: 10000 },
+    ],
+    gestione: "nessuna",
+  });
+  assert.equal(r.redditoLordo, 30000 * 0.67 + 10000 * 0.4);
+  assert.equal(r.imposta, 3615);
 });
 
-test("deadlines per fund and ics with reminders", () => {
-  assert.equal(deadlinesFor(p.deadlines, "gestioneSeparata").length, 4);
-  assert.equal(deadlinesFor(p.deadlines, "artigiani").length, 8);
-  const ics = toIcs(deadlinesFor(p.deadlines, "artigiani"), "it", new Date("2026-09-26T00:00:00Z"));
-  assert.equal(ics.match(/BEGIN:VEVENT/g)?.length, 8);
-  assert.match(ics, /TRIGGER:-P3D/);
+test("soglie: 85k, 100k e redditi da dipendente", () => {
+  const codici = (ricavi: number, dip = 0) =>
+    calcola(rules, { attivita: [{ ateco: "62.01", ricavi }], gestione: "nessuna", redditoDipendente: dip }).avvisi.map((a) => a.codice);
+  assert.ok(codici(86000).includes("soglia-85k"));
+  assert.ok(codici(100001).includes("uscita-immediata"));
+  assert.ok(!codici(85000).includes("soglia-85k"));
+  assert.ok(codici(10000, 36000).includes("dipendente-oltre-limite"));
+});
+
+test("acconti: soglie 51,65 e 257,52", () => {
+  assert.deepEqual(calcolaAcconti(rules, 50), { dovuti: false, prima: 0, seconda: 0 });
+  assert.deepEqual(calcolaAcconti(rules, 200), { dovuti: true, prima: 0, seconda: 200 });
+  assert.deepEqual(calcolaAcconti(rules, 1000), { dovuti: true, prima: 400, seconda: 600 });
+});
+
+test("input non validi", () => {
+  assert.throws(() => calcola(rules, { attivita: [], gestione: "separata" }), /almeno/);
+  assert.throws(() => calcola(rules, { attivita: [{ ateco: "62.01", ricavi: -1 }], gestione: "separata" }), /non valido/);
 });

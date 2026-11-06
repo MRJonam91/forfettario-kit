@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: ❤️ Sostieni il progetto / Support the project
+  - name: 💼 Licenza commerciale / Commercial license
+    url: https://github.com/MRJonam91/forfettario-kit/blob/main/COMMERCIAL-LICENSE.md
+    about: Per integrare forfettario-kit in un prodotto chiuso / To embed forfettario-kit in a closed product
+  - name: ❤️ Sponsor
     url: https://github.com/sponsors/MRJonam91
-    about: GitHub Sponsors · Ko-fi · Buy Me a Coffee · PayPal
+    about: Sostieni lo sviluppo / Support development

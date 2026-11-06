@@ -1,11 +1,13 @@
 ---
-name: ✨ Feature request
-about: Proponi un'idea / Suggest an idea
+name: ✨ Proposta / Feature request
+about: Un caso non coperto, un anno nuovo, una cassa professionale / An uncovered case, a new year, a professional fund
 labels: enhancement
 ---
 
-**Problema da risolvere / Problem to solve**
+**Problema / Problem**
+<!-- Che domanda non riesci a farti rispondere? / Which question can't you answer today? -->
 
-**Soluzione proposta / Proposed solution**
+**Proposta / Proposal**
 
-**Alternative considerate / Alternatives considered**
+**Fonti normative / Legal sources**
+<!-- link a legge, circolare, interpello / link to law, circular, ruling -->

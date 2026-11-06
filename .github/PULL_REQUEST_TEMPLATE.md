@@ -1,11 +1,9 @@
 ## Cosa cambia / What changes
 
-## Perché / Why
+## Fonte normativa (se tocchi i dati) / Legal source (if you touch data)
 
 ## Checklist
-- [ ] `npm test` verde / green
-- [ ] Test aggiunti / Tests added
-- [ ] Header SPDX nei nuovi file / SPDX headers in new files
-- [ ] Core ancora < 1.500 righe / Core still < 1,500 lines
-- [ ] Docs IT/EN aggiornate se serve / IT/EN docs updated if needed
-- [ ] Commit firmati con DCO / Commits signed off (`git commit -s`)
+- [ ] `npm test`, `npm run typecheck`, `npm run core:loc` verdi / green
+- [ ] header SPDX nei file nuovi / SPDX header in new files
+- [ ] CHANGELOG aggiornato / updated
+- [ ] CLA firmato (commento nella PR) / CLA signed (PR comment)

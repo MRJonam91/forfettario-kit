@@ -1,40 +1,87 @@
 {
-  "schema": "fk.t5.0b8d44",
+  "schema": "fk.y3.b41e9c",
   "year": 2026,
-  "verified": false,
-  "sources": [
-    "https://www.tutelaprevidenziale.it/artigiani-e-commercianti-contributi-inps-2026-aliquote-minimali-scadenze-circolare-n-14-2026/",
-    "https://www.inps.it/it/it/inps-comunica/notizie/dettaglio-news-page.news.2026.02.gestioni-artigiani-e-commercianti-i-contributi-per-il-2026.html",
-    "https://calcolatoreforfettario.com/blog/aliquota-inps-gestione-separata-2026",
-    "https://pyva.it/blog/acconti-imposta-sostitutiva-forfettario",
-    "https://www.regime-forfettario.it/calendario-fiscale-2026-scadenze-forfettari/"
-  ],
-  "tax": { "standard": 0.15, "startup": 0.05 },
-  "thresholds": { "stay": 85000, "immediateExit": 100000 },
-  "coefficients": {
-    "professionisti": { "label": "Attività professionali, scientifiche, tecniche, sanitarie, di istruzione, servizi finanziari e assicurativi", "value": 0.78 },
-    "altre": { "label": "Altre attività economiche", "value": 0.67 },
-    "commercio": { "label": "Commercio all'ingrosso e al dettaglio", "value": 0.40 },
-    "alimentari": { "label": "Industrie alimentari e delle bevande", "value": 0.40 },
-    "ambulante-alimentari": { "label": "Commercio ambulante di prodotti alimentari e bevande", "value": 0.40 },
-    "ambulante-altro": { "label": "Commercio ambulante di altri prodotti", "value": 0.54 },
-    "costruzioni": { "label": "Costruzioni e attività immobiliari", "value": 0.86 },
-    "intermediari": { "label": "Intermediari del commercio", "value": 0.62 },
-    "alloggio-ristorazione": { "label": "Attività dei servizi di alloggio e di ristorazione", "value": 0.40 }
+  "updated": "2026-10-13",
+  "sources": ["L. 190/2014, art. 1, commi 54-89 e Allegato 4 (coefficienti di redditività)", "Legge di Bilancio 2026: limite redditi da lavoro dipendente/pensione confermato a 35.000 euro per il 2026", "INPS, circolare n. 8 del 3 febbraio 2026 (Gestione separata)", "INPS, circolare n. 14 del 9 febbraio 2026 (artigiani e commercianti)", "Scadenze F24: saldo e 1° acconto 30/06, 2° acconto 30/11; contributi fissi INPS 16/02, 16/05, 20/08, 16/11 (con slittamento al primo giorno lavorativo)"],
+  "soglie": {
+    "ricavi": 85000,
+    "ricaviUscitaImmediata": 100000,
+    "redditoDipendente": 35000
   },
-  "gestioneSeparata": { "rate": 0.2607, "cap": 122295 },
-  "artigiani": { "minimale": 18808, "fixed": 4521.36, "rate": 0.24, "rateHigh": 0.25, "highFrom": 56224, "cap": 122295 },
-  "commercianti": { "minimale": 18808, "fixed": 4611.64, "rate": 0.2448, "rateHigh": 0.2548, "highFrom": 56224, "cap": 122295 },
-  "reductionForfettari": 0.35,
-  "advance": { "firstShare": 0.4, "noAdvanceBelow": 51.65, "singlePaymentBelow": 257.52 },
-  "deadlines": [
-    { "date": "2026-05-18", "what_it": "INPS artigiani/commercianti: 1ª rata contributi fissi", "what_en": "INPS craftsmen/traders: 1st fixed instalment", "for": ["artigiani", "commercianti"] },
-    { "date": "2026-06-30", "what_it": "F24: saldo 2025 + 1° acconto 2026 imposta sostitutiva (codici 1792, 1790) e contributi", "what_en": "F24: 2025 balance + 1st 2026 advance (codes 1792, 1790) and contributions", "for": ["all"] },
-    { "date": "2026-07-30", "what_it": "F24 differito con maggiorazione 0,40%", "what_en": "Deferred F24 with 0.40% surcharge", "for": ["all"] },
-    { "date": "2026-08-20", "what_it": "INPS artigiani/commercianti: 2ª rata contributi fissi", "what_en": "INPS craftsmen/traders: 2nd fixed instalment", "for": ["artigiani", "commercianti"] },
-    { "date": "2026-11-02", "what_it": "Dichiarazione dei redditi PF 2026 (anno 2025): invio telematico", "what_en": "Income tax return PF 2026 (year 2025): e-filing", "for": ["all"] },
-    { "date": "2026-11-17", "what_it": "INPS artigiani/commercianti: 3ª rata contributi fissi", "what_en": "INPS craftsmen/traders: 3rd fixed instalment", "for": ["artigiani", "commercianti"] },
-    { "date": "2026-11-30", "what_it": "F24: 2° acconto 2026 imposta sostitutiva (codice 1791) e contributi", "what_en": "F24: 2nd 2026 advance (code 1791) and contributions", "for": ["all"] },
-    { "date": "2027-02-16", "what_it": "INPS artigiani/commercianti: 4ª rata contributi fissi", "what_en": "INPS craftsmen/traders: 4th fixed instalment", "for": ["artigiani", "commercianti"] }
-  ]
+  "imposta": {
+    "ordinaria": 0.15,
+    "startup": 0.05,
+    "startupAnni": 5
+  },
+  "acconti": {
+    "minimo": 51.65,
+    "unicaRata": 257.52,
+    "primaRata": 0.4,
+    "scadenzaPrima": "30/06",
+    "scadenzaSeconda": "30/11"
+  },
+  "ateco": {
+    "version": "2007",
+    "note": "Allegato 4 L. 190/2014: in attesa dell'aggiornamento ai codici ATECO 2025 si usa la corrispondenza con ATECO 2007.",
+    "groups": [
+      { "id": "alimentari", "label": "Industrie alimentari e delle bevande", "coefficiente": 0.4, "prefixes": ["10", "11"] },
+      { "id": "commercio", "label": "Commercio all'ingrosso e al dettaglio", "coefficiente": 0.4, "prefixes": ["45", "46.2", "46.3", "46.4", "46.5", "46.6", "46.7", "46.8", "46.9", "47.1", "47.2", "47.3", "47.4", "47.5", "47.6", "47.7", "47.9"] },
+      { "id": "ambulante-alimentari", "label": "Commercio ambulante di prodotti alimentari e bevande", "coefficiente": 0.4, "prefixes": ["47.81"] },
+      { "id": "ambulante-altro", "label": "Commercio ambulante di altri prodotti", "coefficiente": 0.54, "prefixes": ["47.82", "47.89"] },
+      { "id": "costruzioni", "label": "Costruzioni e attività immobiliari", "coefficiente": 0.86, "prefixes": ["41", "42", "43", "68"] },
+      { "id": "intermediari", "label": "Intermediari del commercio", "coefficiente": 0.62, "prefixes": ["46.1"] },
+      { "id": "alloggio", "label": "Attività dei servizi di alloggio e di ristorazione", "coefficiente": 0.4, "prefixes": ["55", "56"] },
+      { "id": "professioni", "label": "Attività professionali, scientifiche, tecniche, sanitarie, di istruzione, servizi finanziari ed assicurativi", "coefficiente": 0.78, "prefixes": ["64", "65", "66", "69", "70", "71", "72", "73", "74", "75", "85", "86", "87", "88"] },
+      { "id": "altre", "label": "Altre attività economiche", "coefficiente": 0.67, "prefixes": ["01", "02", "03", "05", "06", "07", "08", "09", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "35", "36", "37", "38", "39", "49", "50", "51", "52", "53", "58", "59", "60", "61", "62", "63", "77", "78", "79", "80", "81", "82", "84", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99"] }
+    ]
+  },
+  "inps": {
+    "separata": {
+      "aliquota": 0.2607,
+      "massimale": 122295
+    },
+    "artigiani": {
+      "minimale": 18808,
+      "scaglione": 56224,
+      "massimale": 122295,
+      "aliquota": 0.24,
+      "aliquotaOltre": 0.25,
+      "maternita": 7.44,
+      "massimaleAnte1996": 93707
+    },
+    "commercianti": {
+      "minimale": 18808,
+      "scaglione": 56224,
+      "massimale": 122295,
+      "aliquota": 0.2448,
+      "aliquotaOltre": 0.2548,
+      "maternita": 7.44,
+      "massimaleAnte1996": 93707
+    },
+    "riduzioni": {
+      "forfettari": 0.35,
+      "nuoviIscritti": 0.5
+    }
+  },
+  "calendario": {
+    "saldoPrimoAcconto": "06-30",
+    "secondoAcconto": "11-30",
+    "fissi": ["02-16", "05-16", "08-20", "11-16"],
+    "accontoSeparata": 0.8,
+    "accontoIvs": 1.0,
+    "differimento": {
+      "data": "07-30",
+      "maggiorazione": 0.004
+    },
+    "codici": {
+      "impostaPrimoAcconto": "1790",
+      "impostaSecondoAcconto": "1791",
+      "impostaSaldo": "1792",
+      "separata": "PXX",
+      "artigianiFissi": "AF",
+      "artigianiEccedenza": "AP",
+      "commerciantiFissi": "CF",
+      "commerciantiEccedenza": "CP"
+    }
+  }
 }

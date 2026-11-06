@@ -1,64 +1,92 @@
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: AGPL-3.0-only
 // SPDX-FileCopyrightText: 2026 Manoj Rollo (MRJonam91)
 
-import type { Fund, Input, Result, YearParams } from "./model.ts";
+import { FkError, gruppoPerId, trovaGruppo } from "./ateco.ts";
+import { calcolaContributi, r2 } from "./inps.ts";
+import type { Acconti, Avviso, Input, RigaAttivita, Risultato, YearRules } from "./types.ts";
 
-const r2 = (n: number) => Math.round(n * 100) / 100;
+/** Oltre questa cifra l'input è quasi certamente un errore di battitura. */
+const MAX_RICAVI = 9_999_431;
 
-export const OVER_THRESHOLD =
-  "ricavi oltre la soglia di permanenza: il regime forfettario cessa (fk-9)";
-
-export function contributions(grossIncome: number, fund: Fund, p: YearParams, reduction = false): number {
-  if (fund === "gestioneSeparata") {
-    return r2(Math.min(grossIncome, p.gestioneSeparata.cap) * p.gestioneSeparata.rate);
+function verificaImporto(n: unknown, campo: string): number {
+  const v = Number(n);
+  if (!Number.isFinite(v) || v < 0 || v > MAX_RICAVI) {
+    throw new FkError("importo", `importo non valido per ${campo}: ${String(n)}`, campo);
   }
-  const f = p[fund];
-  const base = Math.min(grossIncome, f.cap);
-  const upToHigh = Math.max(0, Math.min(base, f.highFrom) - f.minimale);
-  const aboveHigh = Math.max(0, base - f.highFrom);
-  const due = f.fixed + upToHigh * f.rate + aboveHigh * f.rateHigh;
-  return r2(reduction ? due * (1 - p.reductionForfettari) : due);
+  return v;
 }
 
-export function advanceFor(tax: number, p: YearParams): Result["advance"] {
-  const a = p.advance;
-  if (tax < a.noAdvanceBelow) return { total: 0, june: 0, november: 0 };
-  if (tax < a.singlePaymentBelow) return { total: r2(tax), june: 0, november: r2(tax) };
-  const june = r2(tax * a.firstShare);
-  return { total: r2(tax), june, november: r2(tax - june) };
+/** Acconti dell'imposta sostitutiva per l'anno successivo (metodo storico). */
+export function calcolaAcconti(rules: YearRules, imposta: number): Acconti {
+  const a = rules.acconti;
+  if (imposta <= a.minimo) return { dovuti: false, prima: 0, seconda: 0 };
+  if (imposta <= a.unicaRata) return { dovuti: true, prima: 0, seconda: r2(imposta) };
+  const prima = r2(imposta * a.primaRata);
+  return { dovuti: true, prima, seconda: r2(imposta - prima) };
 }
 
-export function calculate(input: Input, p: YearParams): Result {
-  const coeff = p.coefficients[input.activity];
-  if (!coeff) throw new Error(`attività sconosciuta: ${input.activity} (vedi --attivita-elenco)`);
-  if (input.reduction && input.fund === "gestioneSeparata") throw new Error("la riduzione del 35% vale solo per artigiani e commercianti");
-  const warnings: string[] = [];
-  if (!p.verified) warnings.push(`parametri ${p.year} da verificare con il tuo commercialista o con le fonti ufficiali`);
-  if (input.revenue > p.thresholds.immediateExit) warnings.push(`${OVER_THRESHOLD}: oltre ${p.thresholds.immediateExit} € si esce subito`);
-  else if (input.revenue > p.thresholds.stay) warnings.push(`${OVER_THRESHOLD}: oltre ${p.thresholds.stay} € si esce dall'anno successivo`);
+/** Calcolo completo di un anno nel regime forfettario. Funzione pura, nessun I/O. */
+export function calcola(rules: YearRules, input: Input): Risultato {
+  if (!input.attivita?.length) throw new FkError("attivita", "serve almeno un'attività (codice ATECO + ricavi)");
 
-  const grossIncome = r2(input.revenue * coeff.value);
-  const due = contributions(grossIncome, input.fund, p, input.reduction);
-  const deductible = input.contributionsPaid ?? due;
-  const taxableIncome = r2(Math.max(0, grossIncome - deductible));
-  const taxRate = input.startup ? p.tax.startup : p.tax.standard;
-  const tax = r2(taxableIncome * taxRate);
-  const net = r2(input.revenue - due - tax);
+  const righe: RigaAttivita[] = input.attivita.map((a, i) => {
+    const ricavi = verificaImporto(a.ricavi, `ricavi[${i}]`);
+    const g = a.ateco?.trim() ? trovaGruppo(rules, a.ateco) : a.gruppo ? gruppoPerId(rules, a.gruppo) : undefined;
+    if (!g) throw new FkError("attivita", `attività ${i + 1}: serve un codice ATECO o un settore`);
+    const ateco = a.ateco?.trim() || g.id;
+    return { ateco, ricavi, gruppo: g.id, coefficiente: g.coefficiente, redditoLordo: r2(ricavi * g.coefficiente) };
+  });
+
+  const ricavi = r2(righe.reduce((s, r) => s + r.ricavi, 0));
+  const redditoLordo = r2(righe.reduce((s, r) => s + r.redditoLordo, 0));
+  const contributi = calcolaContributi(rules, redditoLordo, input.gestione, input.riduzione, input.cassa, input.ante1996);
+
+  const avvisi: Avviso[] = [];
+  let contributiDedotti = contributi.totale;
+  if (input.contributiDedotti !== undefined) {
+    contributiDedotti = verificaImporto(input.contributiDedotti, "contributiDedotti");
+  } else if (contributi.totale > 0) {
+    avvisi.push({ codice: "contributi-a-regime" });
+  }
+
+  const imponibile = r2(Math.max(0, redditoLordo - contributiDedotti));
+  const aliquota = input.startup ? rules.imposta.startup : rules.imposta.ordinaria;
+  const imposta = r2(imponibile * aliquota);
+  const acconti = calcolaAcconti(rules, imposta);
+
+  const spese = input.spese === undefined ? 0 : verificaImporto(input.spese, "spese");
+  const costoTotale = r2(contributi.totale + imposta);
+  const netto = r2(ricavi - spese - costoTotale);
+
+  const s = rules.soglie;
+  if (ricavi > s.ricaviUscitaImmediata) avvisi.push({ codice: "uscita-immediata", valore: s.ricaviUscitaImmediata });
+  else if (ricavi > s.ricavi) avvisi.push({ codice: "soglia-85k", valore: s.ricavi });
+  else if (ricavi >= s.ricavi * 0.8) avvisi.push({ codice: "margine-soglia", valore: r2(s.ricavi - ricavi) });
+  if ((input.redditoDipendente ?? 0) > s.redditoDipendente) {
+    avvisi.push({ codice: "dipendente-oltre-limite", valore: s.redditoDipendente });
+  }
+  if (input.startup) avvisi.push({ codice: "startup-requisiti", valore: rules.imposta.startupAnni });
+  if ((input.gestione === "artigiani" || input.gestione === "commercianti") && redditoLordo < rules.inps[input.gestione].minimale) {
+    avvisi.push({ codice: "minimale-ivs", valore: rules.inps[input.gestione].minimale });
+  }
+
   return {
-    grossIncome, contributions: due, taxableIncome, taxRate, tax, net,
-    netShare: input.revenue ? Math.round((net / input.revenue) * 1000) / 1000 : 0,
-    advance: advanceFor(tax, p),
-    warnings,
+    anno: rules.year,
+    ricavi,
+    righe,
+    redditoLordo,
+    contributi,
+    contributiDedotti: r2(contributiDedotti),
+    imponibile,
+    aliquota,
+    imposta,
+    acconti,
+    costoTotale,
+    netto,
+    nettoMensile: r2(netto / 12),
+    accantonamentoMensile: r2(costoTotale / 12),
+    pressione: ricavi > 0 ? r2((costoTotale / ricavi) * 100) / 100 : 0,
+    avvisi,
+    engine: rules.schema,
   };
-}
-
-/** Revenue needed to take home `targetNet` (bisection, monotonic in revenue below the thresholds). */
-export function revenueForNet(targetNet: number, base: Omit<Input, "revenue">, p: YearParams): number {
-  let lo = 0, hi = p.thresholds.immediateExit * 2;
-  for (let i = 0; i < 60; i++) {
-    const mid = (lo + hi) / 2;
-    if (calculate({ ...base, revenue: mid }, p).net < targetNet) lo = mid;
-    else hi = mid;
-  }
-  return Math.ceil(hi);
 }

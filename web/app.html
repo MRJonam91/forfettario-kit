@@ -1,0 +1,161 @@
+<title>forfettario-kit</title>
+<meta name="description" content="Calcolatore regime forfettario 2026: tasse, contributi INPS, netto mensile e scadenze F24 con codici tributo. Gratis, open source, i dati restano nel tuo browser.">
+<meta name="generator" content="forfettario-kit fk.y3.b41e9c">
+<style>
+/*__FONTS__*/
+/*__CSS__*/
+</style>
+
+<div class="page">
+  <header class="top">
+    <a class="brand" href="https://github.com/MRJonam91/forfettario-kit" target="_blank" rel="noopener">
+      <span class="brand-mark" aria-hidden="true">F</span>
+      <span class="brand-name">forfettario<span>-kit</span></span>
+    </a>
+    <div class="top-tools">
+      <label class="sr" for="anno">Anno</label>
+      <select id="anno" class="year"></select>
+      <div class="lang" role="group" aria-label="Lingua / Language">
+        <button type="button" id="lang-it" aria-pressed="true">IT</button>
+        <button type="button" id="lang-en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="intro">
+    <h1 data-i18n="h1">Quanto ti resta davvero, in regime forfettario</h1>
+    <p data-i18n="lead">Inserisci ricavi e codice ATECO: contributi INPS, imposta sostitutiva, netto al mese e tutte le date dell'F24 con i codici tributo. I dati restano nel tuo browser.</p>
+  </section>
+
+  <main class="grid">
+    <form id="dati" class="quadro" autocomplete="off" novalidate>
+      <div class="quadro-head">
+        <span class="quadro-tag">A</span>
+        <h2 data-i18n="formTitle">I tuoi dati</h2>
+        <span id="esempio" class="pill pill-example" data-i18n="example">Esempio</span>
+        <button type="button" id="reset" class="link-btn reset" data-i18n="reset">Ricomincia</button>
+      </div>
+
+      <fieldset class="box">
+        <legend data-i18n="activities">Attività e ricavi incassati</legend>
+        <div id="attivita" class="attivita"></div>
+        <button type="button" id="add-att" class="link-btn" data-i18n="addActivity">+ Aggiungi un'altra attività</button>
+      </fieldset>
+
+      <fieldset class="box">
+        <legend data-i18n="pension">Previdenza</legend>
+        <div class="seg" role="radiogroup" aria-label="Gestione">
+          <label><input type="radio" name="gestione" id="g-separata" value="separata" checked><span data-i18n="gSeparata">Gestione separata</span></label>
+          <label><input type="radio" name="gestione" id="g-artigiani" value="artigiani"><span data-i18n="gArtigiani">Artigiani</span></label>
+          <label><input type="radio" name="gestione" id="g-commercianti" value="commercianti"><span data-i18n="gCommercianti">Commercianti</span></label>
+          <label><input type="radio" name="gestione" id="g-cassa" value="cassa"><span data-i18n="gCassa">Cassa professionale</span></label>
+        </div>
+        <div id="riduzione-wrap" class="stack" hidden>
+          <div class="field">
+            <label for="riduzione" data-i18n="reduction">Riduzione contributi</label>
+            <select id="riduzione">
+              <option value="nessuna" data-i18n="redNone">Nessuna</option>
+              <option value="forfettari" data-i18n="red35">35% (forfettari, su domanda)</option>
+              <option value="nuoviIscritti" data-i18n="red50">50% (nuovi iscritti dal 2025)</option>
+            </select>
+          </div>
+          <label class="check"><input type="checkbox" id="ante1996"><span data-i18n="ante1996">Contributi versati prima del 1996 (massimale ridotto)</span></label>
+        </div>
+        <div id="cassa-wrap" class="row2" hidden>
+          <div class="field">
+            <label for="cassa-aliquota" data-i18n="fundRate">Aliquota cassa (%)</label>
+            <input id="cassa-aliquota" type="text" inputmode="decimal" value="14">
+          </div>
+          <div class="field">
+            <label for="cassa-minimo" data-i18n="fundMin">Contributo minimo (€)</label>
+            <input id="cassa-minimo" type="text" inputmode="decimal" value="0">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="box">
+        <legend data-i18n="situation">Situazione</legend>
+        <label class="check"><input type="checkbox" id="startup"><span data-i18n="startup">Nuova attività: aliquota 5% per i primi 5 anni</span></label>
+        <label class="check"><input type="checkbox" id="primo-anno"><span data-i18n="firstYear">Primo anno: non hai ancora versato acconti</span></label>
+        <details class="more">
+          <summary data-i18n="advanced">Valori precisi (facoltativi)</summary>
+          <div class="field">
+            <label for="dedotti" data-i18n="deducted">Contributi versati nell'anno (€)</label>
+            <input id="dedotti" type="text" inputmode="decimal" placeholder="stima automatica">
+          </div>
+          <div class="field">
+            <label for="spese" data-i18n="costs">Spese reali dell'anno (€)</label>
+            <input id="spese" type="text" inputmode="decimal" placeholder="0">
+          </div>
+          <div class="field">
+            <label for="dipendente" data-i18n="employee">Redditi da dipendente o pensione, anno prima (€)</label>
+            <input id="dipendente" type="text" inputmode="decimal" placeholder="0">
+          </div>
+        </details>
+      </fieldset>
+      <p id="errore" class="errore" role="alert" hidden></p>
+    </form>
+
+    <div class="esito" aria-live="polite">
+      <section class="sintesi">
+        <p class="eyebrow" data-i18n="youKeep">Ti restano</p>
+        <p class="big"><span id="netto-mese">–</span><span class="per" data-i18n="perMonth">al mese</span></p>
+        <p class="sub"><span id="netto-anno">–</span> <span data-i18n="perYear">all'anno</span> · <span data-i18n="setAside">accantona</span> <strong id="accantona">–</strong> <span data-i18n="perMonthShort">al mese</span></p>
+        <div class="barra" id="barra" role="img"></div>
+        <ul class="legenda" id="legenda"></ul>
+      </section>
+
+      <section class="foglio">
+        <h2 data-i18n="ledgerTitle">Dal lordo al netto</h2>
+        <table class="ledger"><tbody id="ledger"></tbody></table>
+        <ul id="avvisi" class="avvisi"></ul>
+      </section>
+
+      <section class="foglio" id="scadenze-box">
+        <div class="f24-head">
+          <h2 id="f24-title"><span data-i18n="f24Title">Versamenti F24</span> <span id="f24-anno"></span></h2>
+          <div class="f24-actions">
+            <button type="button" id="ics" class="btn" data-i18n="addCalendar">Aggiungi al calendario</button>
+            <button type="button" id="copia" class="btn btn-ghost" data-i18n="copyList">Copia elenco</button>
+          </div>
+        </div>
+        <p class="nota" id="f24-nota"></p>
+        <div class="scroll" tabindex="0" role="region" aria-labelledby="f24-title"><table class="f24">
+          <thead><tr><th data-i18n="thDate">Scadenza</th><th data-i18n="thSection">Sezione</th><th data-i18n="thCode">Codice</th><th data-i18n="thWhat">Voce</th><th class="num" data-i18n="thAmount">Importo</th></tr></thead>
+          <tbody id="f24"></tbody>
+          <tfoot><tr><td colspan="4" data-i18n="total">Totale</td><td class="num" id="f24-tot"></td></tr></tfoot>
+        </table></div>
+        <p id="toast" class="toast" role="status" hidden></p>
+      </section>
+
+      <aside class="caffe">
+        <p><strong data-i18n="coffeeTitle">Ti ha evitato un pomeriggio di fogli Excel?</strong> <span data-i18n="coffeeText">forfettario-kit è gratuito e open source. Se ti è utile, puoi sostenerlo.</span></p>
+        <div class="caffe-links">
+          <a href="https://github.com/sponsors/MRJonam91" target="_blank" rel="noopener">GitHub Sponsors</a>
+          <a href="https://ko-fi.com/mrjonam" target="_blank" rel="noopener">Ko-fi</a>
+          <a href="https://buymeacoffee.com/mrjonam" target="_blank" rel="noopener">Buy Me a Coffee</a>
+          <a href="https://paypal.me/manorollo" target="_blank" rel="noopener">PayPal</a>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <section class="faq">
+    <h2 data-i18n="howTitle">Come si calcola</h2>
+    <div class="faq-grid">
+      <div><h3 data-i18n="how1t">Coefficiente di redditività</h3><p data-i18n="how1">Nel forfettario non deduci le spese: il reddito è una percentuale fissa dei ricavi, dal 40% all'86% secondo il codice ATECO (Allegato 4, L. 190/2014).</p></div>
+      <div><h3 data-i18n="how2t">Contributi INPS</h3><p data-i18n="how2">Si calcolano sul reddito lordo. Gestione separata 26,07%; artigiani e commercianti pagano contributi fissi fino al minimale di 18.808 € più una percentuale sull'eccedenza.</p></div>
+      <div><h3 data-i18n="how3t">Imposta sostitutiva</h3><p data-i18n="how3">15%, o 5% per i primi 5 anni di una nuova attività, sul reddito lordo meno i contributi versati nell'anno.</p></div>
+      <div><h3 data-i18n="how4t">Acconti</h3><p data-i18n="how4">Ogni anno paghi il saldo dell'anno prima e gli acconti di quello in corso: 40% a giugno e 60% a novembre per l'imposta, 80% dei contributi per la Gestione separata.</p></div>
+    </div>
+  </section>
+
+  <footer class="piede">
+    <p data-i18n="disclaimer">Stima indicativa basata sui parametri ufficiali dell'anno: non è una consulenza fiscale. Verifica con il tuo commercialista prima di pagare.</p>
+    <p><span data-i18n="privacy">Nessun dato viene inviato: il calcolo avviene nel tuo browser.</span> · <a href="https://github.com/MRJonam91/forfettario-kit/blob/main/docs/DATA_SOURCES.md" target="_blank" rel="noopener" data-i18n="sources">Fonti</a> · <a href="https://github.com/MRJonam91/forfettario-kit" target="_blank" rel="noopener">GitHub</a> · AGPL-3.0 · © 2026 Manoj Rollo (MRJonam91)</p>
+  </footer>
+</div>
+
+<script>
+/*__JS__*/
+</script>

@@ -1,7 +1,11 @@
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: AGPL-3.0-only
 // SPDX-FileCopyrightText: 2026 Manoj Rollo (MRJonam91)
 
-export * from "./core/model.ts";
-export * from "./core/calc.ts";
-export * from "./core/ics.ts";
-export * from "./adapters/years.ts";
+export { calcola, calcolaAcconti } from "./core/calc.ts";
+export { calcolaContributi } from "./core/inps.ts";
+export { FkError, gruppoPerId, normalizzaAteco, trovaGruppo } from "./core/ateco.ts";
+export { anniDisponibili, caricaAnno } from "./adapters/rules.ts";
+export type * from "./core/types.ts";
+export { calcolaScadenzario, fissiAnnoDopo, giornoUtile, festivi } from "./core/scadenze.ts";
+export { parseAliquota, parseImporto } from "./adapters/importi.ts";
+export { scadenzarioIcs } from "./adapters/ics.ts";

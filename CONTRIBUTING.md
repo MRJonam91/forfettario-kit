@@ -1,29 +1,27 @@
-# Contribuire / Contributing — forfettario-kit
+# Contribuire / Contributing
+
+Grazie! / Thank you! 🙌
 
 ## 🇮🇹 Italiano
 
-Grazie! Il progetto è pensato per essere capito in un'ora: il **core** (`src/core/`) resta sotto le
-**1.500 righe** e tutto il resto (fonti dati, output, integrazioni) vive in `src/adapters/` o `plugins/`.
+1. Apri prima una issue per discutere cambi grandi; per correzioni di dati o refusi vai pure diretto in PR.
+2. Requisiti: Node ≥ 22.18 (esegue TypeScript direttamente, niente build per sviluppare).
+3. `npm install`, poi `npm run check` (typecheck + test + dimensione del core) deve essere verde. Se tocchi la web app: `npm run test:e2e` (Playwright; la prima volta `npx playwright install chromium`).
+4. Il core (`src/core/`) resta **senza I/O** e **sotto le 1.500 righe**. Rete, file e CLI vivono in `src/adapters/`.
+5. **Un anno fiscale nuovo è un file di dati**: copia `data/years/2026.json`, aggiorna i valori citando la fonte in `sources` e in `docs/DATA_SOURCES.md`, aggiungi un test con un caso calcolato a mano.
+6. Ogni file sorgente nuovo inizia con l'header SPDX (vedi i file esistenti).
+7. **CLA obbligatorio**: il progetto ha doppia licenza (AGPL + commerciale), quindi alla prima PR commenta `I have read the CLA Document and I hereby sign the CLA`. Testo completo in [CLA.md](CLA.md).
 
-1. Apri una issue per discutere modifiche importanti.
-2. `npm ci && npm test` devono essere verdi (Node ≥ 22.18, nessuna build necessaria).
-3. Un test per ogni bug risolto o funzione aggiunta.
-4. Header SPDX in ogni nuovo file sorgente (copia da un file esistente).
-5. Messaggi di commit in stile [Conventional Commits](https://www.conventionalcommits.org/it/).
-6. Firma ogni commit con il DCO: `git commit -s`.
-
-Aggiungere una fonte dati o un'integrazione: vedi [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), sezione "Estendere".
+**Issue facili**: regole complete di una cassa professionale (es. Inarcassa, ENPAP), traduzione dei messaggi in un'altra lingua, tabella dei coefficienti per codici ATECO 2025 appena pubblicata.
 
 ## 🇬🇧 English
 
-Thanks! The project is designed to be understood in one hour: the **core** (`src/core/`) stays under
-**1,500 lines** and everything else (data sources, outputs, integrations) lives in `src/adapters/` or `plugins/`.
+1. Open an issue first for large changes; data fixes and typos can go straight to a PR.
+2. Requirements: Node ≥ 22.18 (runs TypeScript directly, no build needed for development).
+3. `npm install`, then `npm run check` (typecheck + tests + core size) must pass. If you touch the web app: `npm run test:e2e` (Playwright; first time `npx playwright install chromium`).
+4. The core (`src/core/`) stays **I/O-free** and **under 1,500 lines**. Network, files and CLI live in `src/adapters/`.
+5. **A new tax year is a data file**: copy `data/years/2026.json`, update the values citing the source in `sources` and in `docs/DATA_SOURCES.md`, add a test with a hand-computed case.
+6. Every new source file starts with the SPDX header (see existing files).
+7. **CLA required**: the project is dual-licensed (AGPL + commercial), so on your first PR comment `I have read the CLA Document and I hereby sign the CLA`. Full text in [CLA.md](CLA.md).
 
-1. Open an issue to discuss significant changes.
-2. `npm ci && npm test` must pass (Node ≥ 22.18, no build step needed).
-3. One test for every fixed bug or added feature.
-4. SPDX header in every new source file (copy it from an existing file).
-5. [Conventional Commits](https://www.conventionalcommits.org/) messages.
-6. Sign off every commit with the DCO: `git commit -s`.
-
-Adding a data source or integration: see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), "Extending".
+**Good first issues**: full rules for one professional fund (e.g. Inarcassa, ENPAP), message translation into another language, coefficient table for ATECO 2025 codes once published.

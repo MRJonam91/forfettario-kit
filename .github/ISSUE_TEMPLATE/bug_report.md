@@ -1,18 +1,21 @@
 ---
-name: 🐛 Bug report
-about: Qualcosa non funziona / Something is not working
+name: 🐞 Bug / errore di calcolo
+about: Un risultato sbagliato o un crash / A wrong result or a crash
 labels: bug
 ---
 
-**Cosa succede / What happens**
+**Comando / Command**
 
-**Cosa ti aspettavi / Expected behaviour**
+```bash
+npx forfettario-kit ...
+```
 
-**Come riprodurre / Steps to reproduce**
-1.
-2.
+**Risultato ottenuto / Actual result**
+
+**Risultato atteso e fonte / Expected result and source**
+<!-- es. circolare INPS, articolo di legge, calcolo del commercialista / e.g. INPS circular, law article -->
 
 **Ambiente / Environment**
-- Versione / Version:
-- Node:
+- forfettario-kit: <!-- npx forfettario-kit --version -->
+- Node: <!-- node -v -->
 - OS:
